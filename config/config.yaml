@@ -1,0 +1,6 @@
+artifacts_root: artifacts
+
+data_ingestion:
+  root: artifacts/data_ingestion
+  raw_data_path: data\archive (2).zip
+  extracted_data_path: artifacts/data_ingestion/extracted_data
