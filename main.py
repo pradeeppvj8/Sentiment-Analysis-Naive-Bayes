@@ -1,9 +1,5 @@
-from sanbproject.logger import logging
-from sanbproject.exception import CustomException
-import sys
+from sanbproject.pipeline.training_pipeline import TrainingPipeline
 
-try:
-    a = 2 / 0
-except Exception as e:
-    logging.info(e)
-    raise CustomException(e, sys)
+if __name__ == "__main__":
+    training_pipeline = TrainingPipeline()
+    training_pipeline.trigger_training_pipeline()
