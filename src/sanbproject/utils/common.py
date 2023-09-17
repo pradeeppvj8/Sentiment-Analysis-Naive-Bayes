@@ -5,6 +5,7 @@ from ensure import ensure_annotations
 from sanbproject.logger import logging
 import os
 import joblib
+import json
 
 @ensure_annotations
 def read_yaml(file_path: Path) -> ConfigBox:
@@ -37,7 +38,8 @@ def create_directories(paths : list):
 
 @ensure_annotations
 def save_bin(data, path:Path):
-    """ Saves binary file
+    """ 
+    Saves binary file
 
     Args:
         data: data to be saved as binary
@@ -46,3 +48,19 @@ def save_bin(data, path:Path):
     joblib.dump(data, path)
     logging.info(f"Binary file saved at : {path}")
 
+@ensure_annotations
+def load_bin(path: Path):
+    """
+    Loads saved object
+    """
+    obj = joblib.load(path)
+    logging.info(f"Loaded object stored in {path}")
+    return obj
+
+@ensure_annotations
+def save_json(data ,path: Path):
+
+    with open(path, 'w') as file:
+        json.dump(data, file, indent=4)
+
+    logging.info(f"Saved json file in path {path}")

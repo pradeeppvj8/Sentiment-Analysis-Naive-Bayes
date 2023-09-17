@@ -1,7 +1,7 @@
 from sanbproject.constants import *
 from sanbproject.utils.common import read_yaml
 from sanbproject.entity.config_entity import (DataIngestionConfig,DataTransformationConfig,
-                                              ModelTrainerConfig)
+                                              ModelTrainerConfig, ModelEvalConfig)
 from pathlib import Path
 
 class ConfigurationManager:
@@ -33,11 +33,12 @@ class ConfigurationManager:
         """
         config = self.config.data_transformation
         schema = self.schema
+        params = self.params
 
         data_transformation_config = DataTransformationConfig(
             root=Path(config.root),
             full_data_set_path=Path(config.full_data_set_path),
-            test_size=config.test_size,
+            test_size=params.test_size,
             target_column_name = schema.TARGET_COLUMN_NAME.name,
             all_columns = schema.COLUMNS ,
             tf_idf_vectorizer_path = Path(config.tf_idf_vectorizer_path),
@@ -55,3 +56,16 @@ class ConfigurationManager:
             model_name = Path(config.model_name)
         )
         return model_trainer_config
+    
+    def get_model_eval_config(self) -> ModelEvalConfig:
+        config = self.config.model_eval
+
+        model_eval_config = ModelEvalConfig(
+            root= Path(config.root),
+            model_path = Path(config.model_path),
+            test_x_path= Path(config.test_x_path),
+            test_y_path=Path(config.test_y_path),
+            metrics_path=Path(config.metrics_path),
+            mlflow_uri=config.mlflow_uri
+        )
+        return model_eval_config

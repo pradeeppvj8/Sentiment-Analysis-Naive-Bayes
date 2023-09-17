@@ -23,3 +23,12 @@ class ModelTrainerConfig:
     train_x_path: Path
     train_y_path: Path
     model_name: Path
+
+@dataclass(frozen=True)
+class ModelEvalConfig:
+    root: Path
+    model_path: Path
+    test_x_path: Path
+    test_y_path: Path
+    metrics_path: Path
+    mlflow_uri: str

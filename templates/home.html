@@ -1,0 +1,22 @@
+<html>
+<body>
+    <div class="login">   
+       <form action="/predict" method="post">
+        <h1>
+            <legend>Sentiment Analysis Using Naive Bayes</legend>
+        </h1>
+    </br>
+        <div class="mb-3">
+            <label class="form-label">Write your review : </label>
+            <input class="form-control" type="text" name="review"/>
+        </div>
+    </br>
+        <div class="mb-3">
+            <input class="btn btn-primary" type="submit" value="Predict your reviews sentiment" required />
+        </div>
+    </form>
+    <h3>
+       The review is {{result}}
+    </h3>
+   <body>
+</html>

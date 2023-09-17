@@ -31,23 +31,25 @@ class DataTransformation:
             logging.info("Data transformation has started")
             # Get the data set
             data = pd.read_csv(self.config.full_data_set_path, sep='\t')
-
+            # Remove unwanted features
             data = self.simplify_data_set(data=data)
-
+            # Prepare the objects required for preprocessing the "reviews" column
             lemmatizer, punc_to_remove, stop_words, speller = self.get_required_preprocessing_objects()
 
             logging.info("Reviews text preprocessing started")
-            
+
+            # Perform preprocessing on "reviews" column
             data.loc[ : , ["preprocessed_review"]] = data["verified_reviews"].apply(lambda text: self.perform_text_preprocessing(text, lemmatizer, punc_to_remove, stop_words, speller))
             
             logging.info("Reviews text preprocessing ended")
 
+            # Performing train test split
             X_train, X_test, y_train, y_test = self.perform_train_test_split(data)
-
+            # Performing tf-idf vectorization
             X_train_tf_idf, X_test_tf_idf = self.perform_tf_idf_vectorization(X_train, X_test)
-
+            # Handling class imbalance
             X_train_bal, y_train_bal = self.handle_class_imbalance(X_train_tf_idf, y_train)
-
+            # Creating training and testing data csv files
             self.create_train_test_csv_files(X_train_bal, y_train_bal,X_test_tf_idf, y_test)
 
             logging.info("Data transformation has ended")

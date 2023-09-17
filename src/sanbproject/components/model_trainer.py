@@ -27,3 +27,5 @@ class ModelTrainer:
         # Save model
         create_directories([self.config.root])
         save_bin(nb_model, Path(os.path.join(self.config.root,self.config.model_name)))
+
+        logging.info("Model training has ended")

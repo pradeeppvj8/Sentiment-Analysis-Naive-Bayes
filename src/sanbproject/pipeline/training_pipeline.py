@@ -2,6 +2,7 @@ from sanbproject.config.configuration import ConfigurationManager
 from sanbproject.components.data_ingestion import DataIngestion
 from sanbproject.components.data_transformation import DataTransformation
 from sanbproject.components.model_trainer import ModelTrainer
+from sanbproject.components.model_eval import ModelEvaluation
 from sanbproject.logger import logging
 from sanbproject.exception import CustomException
 import sys
@@ -41,6 +42,13 @@ class TrainingPipeline:
             logging.info("\n\n============== Model Training completed =======================\n\n #################")
 
             logging.info("\n\n============== Model Evaluation Started =======================")
+            # Get model evaluation confif
+            model_eval_config = self.configuration_manager.get_model_eval_config()
+            # Get model evaluation component
+            model_eval_component = ModelEvaluation(config= model_eval_config)
+            # Do model evaluation
+            model_eval_component.perform_model_evaluation()
+            logging.info("\n\n============== Model Evaluation completed =======================\n\n #################")
         except Exception as e:
             logging.exception(e)
             raise CustomException(e, sys)
