@@ -1,6 +1,7 @@
 from sanbproject.constants import *
 from sanbproject.utils.common import read_yaml
-from sanbproject.entity.config_entity import DataIngestionConfig,DataTransformationConfig
+from sanbproject.entity.config_entity import (DataIngestionConfig,DataTransformationConfig,
+                                              ModelTrainerConfig)
 from pathlib import Path
 
 class ConfigurationManager:
@@ -43,3 +44,14 @@ class ConfigurationManager:
             download_nltk_data = config.download_nltk_data
         )
         return data_transformation_config
+    
+    def get_model_trainer_config(self) -> ModelTrainerConfig :
+        config = self.config.model_trainer
+        
+        model_trainer_config = ModelTrainerConfig(
+            root= Path(config.root),
+            train_x_path= Path(config.train_x_path),
+            train_y_path = Path(config.train_y_path),
+            model_name = Path(config.model_name)
+        )
+        return model_trainer_config

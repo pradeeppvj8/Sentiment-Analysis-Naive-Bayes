@@ -16,3 +16,10 @@ class DataTransformationConfig:
     all_columns: dict
     tf_idf_vectorizer_path: Path
     download_nltk_data: bool
+
+@dataclass(frozen=True)
+class ModelTrainerConfig:
+    root: Path
+    train_x_path: Path
+    train_y_path: Path
+    model_name: Path

@@ -31,15 +31,25 @@ class DataTransformation:
             logging.info("Data transformation has started")
             # Get the data set
             data = pd.read_csv(self.config.full_data_set_path, sep='\t')
+
             data = self.simplify_data_set(data=data)
+
             lemmatizer, punc_to_remove, stop_words, speller = self.get_required_preprocessing_objects()
+
             logging.info("Reviews text preprocessing started")
+            
             data.loc[ : , ["preprocessed_review"]] = data["verified_reviews"].apply(lambda text: self.perform_text_preprocessing(text, lemmatizer, punc_to_remove, stop_words, speller))
+            
             logging.info("Reviews text preprocessing ended")
+
             X_train, X_test, y_train, y_test = self.perform_train_test_split(data)
+
             X_train_tf_idf, X_test_tf_idf = self.perform_tf_idf_vectorization(X_train, X_test)
+
             X_train_bal, y_train_bal = self.handle_class_imbalance(X_train_tf_idf, y_train)
+
             self.create_train_test_csv_files(X_train_bal, y_train_bal,X_test_tf_idf, y_test)
+
             logging.info("Data transformation has ended")
         except Exception as e:
             logging.exception(e)
@@ -50,34 +60,44 @@ class DataTransformation:
 
         (pd.DataFrame(X_train_bal.toarray())).to_csv(os.path.join(self.config.root, "train_x.csv") , index = False)
         (pd.DataFrame(X_test_tf_idf.toarray())).to_csv(os.path.join(self.config.root, "test_x.csv") , index = False)
+        
         y_train_bal.to_csv(os.path.join(self.config.root, "train_y.csv"), index = False)
         y_test.to_csv(os.path.join(self.config.root, "test_y.csv") , index = False)
+
         logging.info("Created train & test csv files")
         
     def handle_class_imbalance(self, X_train_tf_idf, y_train):
         smote = SMOTE(random_state=42)
+
         # Handle class imbalance
         X_train_bal, y_train_bal = smote.fit_resample(X_train_tf_idf, y_train)
+
         logging.info("Class imbalance handled")
         return(X_train_bal, y_train_bal)
 
     def perform_tf_idf_vectorization(self, X_train, X_test):
         # Instantiating tf_idf vectorizer
         tf_idf_vectorizer = TfidfVectorizer()
+
         # Fit and transform train data
         X_train_tf_idf = tf_idf_vectorizer.fit_transform(X_train['preprocessed_review'])
         # Only transform test data
         X_test_tf_idf = tf_idf_vectorizer.transform(X_test['preprocessed_review'])
+        
         logging.info("TF-IDF vectorization complete")
+
         create_directories([self.config.tf_idf_vectorizer_path])
         save_bin(tf_idf_vectorizer, Path(os.path.join(self.config.tf_idf_vectorizer_path,"tf_idf_vectorizer_obj")))
+        
         return (X_train_tf_idf, X_test_tf_idf)
 
     def perform_train_test_split(self, data):
         # Creating X and y data frames
         y = pd.DataFrame(data[self.config.target_column_name], columns=[self.config.target_column_name])
         X = pd.DataFrame(data["preprocessed_review"], columns=["preprocessed_review"])
+        
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = self.config.test_size, random_state=42)
+        
         logging.info("Train test split complete")
         return (X_train, X_test, y_train, y_test)   
 
@@ -86,6 +106,7 @@ class DataTransformation:
         data = data[[self.config.target_column_name,'verified_reviews']]
         # Ratings from 1 to 3 are mapped to 0 and rating 4 & 5 are mapped to 1
         data.loc[ : , [self.config.target_column_name]] = data[self.config.target_column_name].apply(lambda val : 0 if val <=3 else 1)
+        
         logging.info("Simplifying the data set is done")
         return data
     

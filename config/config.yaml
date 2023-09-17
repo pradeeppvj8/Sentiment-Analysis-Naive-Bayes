@@ -11,3 +11,9 @@ data_transformation:
   test_size: 0.2
   tf_idf_vectorizer_path: artifacts/data_transformation/tf_idf_vectorizer
   download_nltk_data: False
+
+model_trainer:
+  root: artifacts/model_trainer
+  train_x_path: artifacts/data_transformation/train_x.csv
+  train_y_path: artifacts\data_transformation\train_y.csv
+  model_name: mnb_model
