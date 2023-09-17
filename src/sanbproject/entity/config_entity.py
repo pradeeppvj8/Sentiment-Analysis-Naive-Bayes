@@ -6,3 +6,13 @@ class DataIngestionConfig:
     root: Path
     raw_data_path: Path 
     extracted_data_path : Path
+
+@dataclass(frozen=True)
+class DataTransformationConfig:
+    root: Path
+    full_data_set_path: Path
+    test_size: float
+    target_column_name: str
+    all_columns: dict
+    tf_idf_vectorizer_path: Path
+    download_nltk_data: bool

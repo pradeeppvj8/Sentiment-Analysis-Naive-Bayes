@@ -4,6 +4,7 @@ from box import ConfigBox
 from ensure import ensure_annotations
 from sanbproject.logger import logging
 import os
+import joblib
 
 @ensure_annotations
 def read_yaml(file_path: Path) -> ConfigBox:
@@ -33,3 +34,15 @@ def create_directories(paths : list):
     for path in paths:
         os.makedirs(path, exist_ok=True)
         logging.info(f"Created directory {path} successfully")
+
+@ensure_annotations
+def save_bin(data, path:Path):
+    """ Saves binary file
+
+    Args:
+        data: data to be saved as binary
+        path (Path): path of binary file
+    """
+    joblib.dump(data, path)
+    logging.info(f"Binary file saved at : {path}")
+

@@ -1,1 +1,6 @@
-key: val
+TARGET_COLUMN_NAME:
+  name: rating
+
+COLUMNS:
+  verified_reviews: verified_reviews
+  preprocessed_review: preprocessed_review

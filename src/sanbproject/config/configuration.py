@@ -1,6 +1,7 @@
 from sanbproject.constants import *
 from sanbproject.utils.common import read_yaml
-from sanbproject.entity.config_entity import DataIngestionConfig
+from sanbproject.entity.config_entity import DataIngestionConfig,DataTransformationConfig
+from pathlib import Path
 
 class ConfigurationManager:
     def __init__(self, config_filepath = CONFIG_FILE_PATH,
@@ -10,7 +11,7 @@ class ConfigurationManager:
         # Contents of 'params' file
         self.params = read_yaml(params_filepath)
         # Contents of 'schema' file
-        self.schema = schema_filepath
+        self.schema = read_yaml(schema_filepath)
 
     def get_data_ingestion_config(self) -> DataIngestionConfig:
         """
@@ -24,3 +25,21 @@ class ConfigurationManager:
             extracted_data_path=Path(config.extracted_data_path)
         )
         return data_ingestion_config
+    
+    def get_data_transformation_config(self) -> DataTransformationConfig:
+        """
+        Returns all the config data related to data transformation
+        """
+        config = self.config.data_transformation
+        schema = self.schema
+
+        data_transformation_config = DataTransformationConfig(
+            root=Path(config.root),
+            full_data_set_path=Path(config.full_data_set_path),
+            test_size=config.test_size,
+            target_column_name = schema.TARGET_COLUMN_NAME.name,
+            all_columns = schema.COLUMNS ,
+            tf_idf_vectorizer_path = Path(config.tf_idf_vectorizer_path),
+            download_nltk_data = config.download_nltk_data
+        )
+        return data_transformation_config
